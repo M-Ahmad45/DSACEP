@@ -1,10 +1,13 @@
-
+from record import EmployeeRecord
+from typing import List
 def read_file(filename):
-    data = dict()
+    data:List[EmployeeRecord] = []
     with open(filename,"r") as file:
         file.readline()
         file.readline()
         for record in file.readlines():
-            print(record.split("\t"))
+            rec = EmployeeRecord(*record.split("\t"))
+            data.append(rec)
+    return data
 
-read_file("./data/data_100.txt")
+print(read_file("./data/data_10.txt"))
