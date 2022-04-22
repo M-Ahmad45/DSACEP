@@ -14,8 +14,8 @@ class HashTable:
     def insert(self, record: EmployeeRecord):
         slot = self.find_empty(record.ID)
         self.data[slot] = record
-        self._memory+=getsizeof(record)
-    
+        self._memory+=record.size
+
     def get(self, recordId:int):
         slot = self.find_record(recordId)
         if slot is not None:
@@ -26,9 +26,8 @@ class HashTable:
     def delete(self,recordId:int):
         slot = self.find_record(recordId)
         if slot is not None:
-            self._memory-=getsizeof(self.data[slot]) #exclude record memory
+            self._memory-=self.data[slot].size #exclude record memory
             self.data[slot] = -1 #deleted marker
-            self._memory+=getsizeof(self.data[slot]) #add memory for marker
 
     def hash(self, recordId:int):
         return recordId%self.size
