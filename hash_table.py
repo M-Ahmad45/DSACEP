@@ -1,51 +1,56 @@
 
 from record import EmployeeRecord
 from typing import List
+from sys import getsizeof
 
 class HashTable:
     def __init__(self, size):
-        #self.size = self.get_required_size(size) 
-        self.size = int(size+0.4*size)
+        self.size = self.get_required_size(size) 
         self.data:List[EmployeeRecord] = [None]*self.size
+        self._memory = getsizeof(self.data)
 
+    def get_mem(self):
+        return self._memory
     def insert(self, record: EmployeeRecord):
         slot = self.find_empty(record.ID)
         self.data[slot] = record
-    
-    def get(self, recordId):
+        self._memory+=record.size
+
+    def get(self, recordId:int):
         slot = self.find_record(recordId)
         if slot is not None:
             return self.data[slot]
         else:
             return None
 
-    def delete(self,record:EmployeeRecord):
-        slot = self.find_record(record)
+    def delete(self,recordId:int):
+        slot = self.find_record(recordId)
         if slot is not None:
-            self.data[slot] = None
+            self._memory-=self.data[slot].size #exclude record memory
+            self.data[slot] = -1 #deleted marker
 
-
-    def hash(self, recordId):
+    def hash(self, recordId:int):
         return recordId%self.size
     
-    def probe(self,recordId,i):
+    def probe(self,recordId:int,i):
         return (self.hash(recordId)+i**2)%self.size
     
-    def find_empty(self,key):
-        i = self.hash(key)
+    def find_empty(self,recordId:int):
+        i = self.hash(recordId)
         j = 1
-        while (self.data[i]!=None) and j<=self.size:
-            i = self.probe(key,j)
+        while (self.data[i]!=None and self.data[i]!=-1) and j<=self.size:
+            i = self.probe(recordId,j)
             j+=1
         return i
     
-    def find_record(self,key:EmployeeRecord):
-        i = self.hash(key)
+    def find_record(self,recordId:int):
+        i = self.hash(recordId)
         j = 1
         while j<=self.size and self.data[i]!=None:
-            if self.data[i].ID == key:
-                break
-            i = self.probe(key,j)
+            if self.data[i]!=-1:
+                if self.data[i].ID == recordId:
+                    break
+            i = self.probe(recordId,j)
             j+=1
         if self.data[i]==None:
             return None
@@ -58,7 +63,7 @@ class HashTable:
             prime =1
             x = num-1
             while x>1:
-                if x%num==0:
+                if num%x==0:
                     prime = 0
                     break
                 x-=1
