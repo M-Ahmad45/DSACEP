@@ -35,7 +35,6 @@ def get_keys(data:List[EmployeeRecord])->List[int]:
 @timer
 def sort_traverse(table:HashTable,data:List[EmployeeRecord],print_on=True):
     keys = get_keys(data)
-    print(getsizeof(keys))
     keys.sort()
     for i in keys:
         d = table.get(i)
