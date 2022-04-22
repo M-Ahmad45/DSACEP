@@ -5,5 +5,4 @@ class EmployeeRecord:
         self.name = name
         self.city = city
         self.cat = cat
-    def __sizeof__(self):
-        return getsizeof(self.ID)+ getsizeof(self.name) + getsizeof(self.city) + getsizeof(self.cat)
+        self.size = getsizeof(self.ID)+ getsizeof(self.name) + getsizeof(self.city) + getsizeof(self.cat)
