@@ -17,14 +17,15 @@ def read_file(filename):
 def timer(func):
     def inner(*args):
         t1 = perf_counter()
-        func(*args)
+        mem = func(*args)
         t2 = perf_counter()
-        return t2-t1
+        return (t2-t1,mem)
     return inner
 @timer
 def insert(table:HashTable, data):
     for i in data:
         table.insert(i)
+    return table.get_mem()
 
 def get_keys(data:List[EmployeeRecord])->List[int]:
     keys = []
@@ -40,6 +41,7 @@ def sort_traverse(table:HashTable,data:List[EmployeeRecord],print_on=True):
         d = table.get(i)
         if print_on:
             print(d)
+    return table.get_mem()+getsizeof(keys)
 @timer
 def find(table:HashTable,data,print_on=True):
     for i in range(len(data)):
@@ -47,3 +49,11 @@ def find(table:HashTable,data,print_on=True):
             d = table.get(i)
             if print_on:
                 print(d)
+    return table.get_mem()
+
+
+@timer
+def delete(table:HashTable,data:List[EmployeeRecord]):
+    for i in range(1,len(data),2):
+        table.delete(data[i].ID)
+    return table.get_mem()
