@@ -2,6 +2,7 @@ from record import EmployeeRecord
 from typing import List
 from time import perf_counter
 from hash_table import HashTable
+from sys import getsizeof
 
 def read_file(filename):
     data:List[EmployeeRecord] = []
@@ -25,14 +26,19 @@ def insert(table:HashTable, data):
     for i in data:
         table.insert(i)
 
-def sort_data(data:List[EmployeeRecord]):
-    data.sort(key= lambda x:x.ID)
+def get_keys(data:List[EmployeeRecord])->List[int]:
+    keys = []
+    for i in data:
+        keys.append(i.ID)
+    return keys
 
 @timer
 def sort_traverse(table:HashTable,data:List[EmployeeRecord],print_on=True):
-    sort_data(data)
-    for i in data:
-        d = table.get(i.ID)
+    keys = get_keys(data)
+    print(getsizeof(keys))
+    keys.sort()
+    for i in keys:
+        d = table.get(i)
         if print_on:
             print(d)
 @timer
