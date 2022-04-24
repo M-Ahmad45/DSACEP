@@ -14,6 +14,12 @@ def read_file(filename):
             data.append(rec)
     return (data,record_count)
 
+def get_kb_mb(size_in_bytes):
+    if size_in_bytes>10e3 and size_in_bytes<10e6:
+        return str(round(size_in_bytes/10e3,3)) + " kB"
+    else:
+        return str(round(size_in_bytes/10e6,3)) + " MB"
+
 def timer(func):
     def inner(*args):
         t1 = perf_counter()
