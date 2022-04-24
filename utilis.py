@@ -15,7 +15,7 @@ def read_file(filename):
     return (data,record_count)
 
 def get_kb_mb(size_in_bytes):
-    if size_in_bytes>10e3 and size_in_bytes<10e6:
+    if size_in_bytes<10e6:
         return str(round(size_in_bytes/10e3,3)) + " kB"
     else:
         return str(round(size_in_bytes/10e6,3)) + " MB"
@@ -28,7 +28,7 @@ def timer(func):
         return (t2-t1,mem)
     return inner
 @timer
-def insert(table:HashTable, data):
+def insert(table:HashTable, data:List[EmployeeRecord]):
     for i in data:
         table.insert(i)
     return table.get_mem()
@@ -49,7 +49,7 @@ def sort_traverse(table:HashTable,data:List[EmployeeRecord],print_on=True):
             print(d)
     return table.get_mem()+getsizeof(keys)
 @timer
-def find(table:HashTable,data,print_on=True):
+def find(table:HashTable,data:List[EmployeeRecord],print_on=True):
     for i in range(len(data)):
         if i%2==0:
             d = table.get(i)
